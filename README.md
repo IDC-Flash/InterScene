@@ -28,7 +28,7 @@
       <img src='https://img.shields.io/badge/InterScene-Page-orange?style=for-the-badge&logo=Google%20chrome&logoColor=white&labelColor=D35400' alt='Project Page'></a>
   </p>
 
-Our framework enables physically simulated characters to perform long-term interaction tasks in diverse and complex 3D scenes via composing reusable skills that include sitting (gray), getting up (blue), and avoding obstacles (red).
+Our framework enables physically simulated characters to perform long-term interaction tasks in diverse and complex 3D scenes via composing reusable skills that include sitting (gray), getting up (blue), and avoiding obstacles (red).
 
 ## Citation
 
