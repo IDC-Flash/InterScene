@@ -8,15 +8,17 @@
     ·
     <a href="http://www.buzhenhuang.com/"><strong>Buzhen Huang</strong></a>
     ·
-    <strong>Junyu Zhang</strong>
+    <a href="https://github.com/budiu-39"><strong>Junyu Zhang</strong>
     ·
     <a href="https://haofanwang.github.io/"><strong>Haofan Wang</strong></a>
     ·
     <a href="https://tangxuvis.github.io/"><strong>Xu Tang</strong></a>
     ·
     <a href="https://www.yangangwang.com/"><strong>Yangang Wang</strong></a>
+    <br>
+    Southeast University&emsp;Shanghai AI Laboratory&emsp;Xiaohongshu Inc.
   </p>
-  <h2 align="center">arXiv Preprint 2023</h2>
+  <h2 align="center">3DV 2024</h2>
   <img src='https://github.com/liangpan99/InterScene/blob/main/docs/assets/teaser.png'>
 </p>
 
@@ -28,7 +30,10 @@
       <img src='https://img.shields.io/badge/InterScene-Page-orange?style=for-the-badge&logo=Google%20chrome&logoColor=white&labelColor=D35400' alt='Project Page'></a>
   </p>
 
-Our framework enables physically simulated characters to perform long-term interaction tasks in diverse and complex 3D scenes via composing reusable skills that include sitting (gray), getting up (blue), and avoding obstacles (red).
+Our framework enables physically simulated characters to perform long-term interaction tasks in diverse and complex 3D scenes via composing reusable skills that include sitting (gray), getting up (blue), and avoiding obstacles (red).
+
+## News
+- [2023-10] InterScene got accepted at 3DV 2024. We plan to release the code in mid-November 2023.
 
 ## Citation
 
