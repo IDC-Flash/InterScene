@@ -59,63 +59,63 @@ objects:
   - b5c1677b-8398-4332-9e83-e85c789ee209
   - d5778213-37e1-4dc7-a1d6-e9de2e8a1733
 motions:
-- file: chair_mo_stageII/ref_motion.npy
+- file: motions/chair_mo_stageII/ref_motion.npy
   stateInitRange: 0.7142
   weight: 0.05
-- file: chair_mo001_stageII/ref_motion.npy
+- file: motions/chair_mo001_stageII/ref_motion.npy
   stateInitRange: 0.6714
   weight: 0.05
-- file: chair_mo002_stageII/ref_motion.npy
+- file: motions/chair_mo002_stageII/ref_motion.npy
   stateInitRange: 0.5000
   weight: 0.05
-- file: chair_mo003_stageII/ref_motion.npy
+- file: motions/chair_mo003_stageII/ref_motion.npy
   stateInitRange: 0.7000
   weight: 0.05
-- file: chair_mo004_stageII/ref_motion.npy
+- file: motions/chair_mo004_stageII/ref_motion.npy
   stateInitRange: 0.7142
   weight: 0.05
-- file: chair_mo005_stageII/ref_motion.npy
+- file: motions/chair_mo005_stageII/ref_motion.npy
   stateInitRange: 0.8082
   weight: 0.05
-- file: chair_mo006_stageII/ref_motion.npy
+- file: motions/chair_mo006_stageII/ref_motion.npy
   stateInitRange: 0.7808
   weight: 0.05
-- file: chair_mo007_stageII/ref_motion.npy
+- file: motions/chair_mo007_stageII/ref_motion.npy
   stateInitRange: 0.7083
   weight: 0.05
-- file: chair_mo008_stageII/ref_motion.npy
+- file: motions/chair_mo008_stageII/ref_motion.npy
   stateInitRange: 0.5250
   weight: 0.05
-- file: chair_mo009_stageII/ref_motion.npy
+- file: motions/chair_mo009_stageII/ref_motion.npy
   stateInitRange: 0.5500
   weight: 0.05
-- file: chair_mo010_stageII/ref_motion.npy
+- file: motions/chair_mo010_stageII/ref_motion.npy
   stateInitRange: 0.5077
   weight: 0.05
-- file: chair_mo011_stageII/ref_motion.npy
+- file: motions/chair_mo011_stageII/ref_motion.npy
   stateInitRange: 0.7777
   weight: 0.05
-- file: chair_mo012_stageII/ref_motion.npy
+- file: motions/chair_mo012_stageII/ref_motion.npy
   stateInitRange: 0.6181
   weight: 0.05
-- file: chair_mo013_stageII/ref_motion.npy
+- file: motions/chair_mo013_stageII/ref_motion.npy
   stateInitRange: 0.6266
   weight: 0.05
-- file: chair_mo014_stageII/ref_motion.npy
+- file: motions/chair_mo014_stageII/ref_motion.npy
   stateInitRange: 0.4736
   weight: 0.05
-- file: chair_mo015_stageII/ref_motion.npy
+- file: motions/chair_mo015_stageII/ref_motion.npy
   stateInitRange: 0.7428
   weight: 0.05
-- file: chair_mo016_stageII/ref_motion.npy
+- file: motions/chair_mo016_stageII/ref_motion.npy
   stateInitRange: 0.7000
   weight: 0.05
-- file: chair_mo017_stageII/ref_motion.npy
+- file: motions/chair_mo017_stageII/ref_motion.npy
   stateInitRange: 0.5833
   weight: 0.05
-- file: chair_mo018_stageII/ref_motion.npy
+- file: motions/chair_mo018_stageII/ref_motion.npy
   stateInitRange: 0.8125
   weight: 0.05
-- file: chair_mo019_stageII/ref_motion.npy
+- file: motions/chair_mo019_stageII/ref_motion.npy
   stateInitRange: 0.7500
   weight: 0.05
