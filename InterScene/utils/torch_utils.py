@@ -28,6 +28,7 @@
 
 import torch
 import numpy as np
+from rl_games.algos_torch import torch_ext
 
 from isaacgym.torch_utils import *
 
@@ -180,3 +181,8 @@ def calc_heading_quat_inv(q):
 
     heading_q = quat_from_angle_axis(-heading, axis)
     return heading_q
+
+def load_checkpoint(filename, device):
+    print("=> loading checkpoint '{}' at device: {}".format(filename, device))
+    state = torch_ext.safe_filesystem_op(torch.load, filename, map_location=torch.device(device))
+    return state

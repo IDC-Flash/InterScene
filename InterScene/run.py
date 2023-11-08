@@ -46,6 +46,8 @@ from learning import amp_players
 from learning import amp_models
 from learning import amp_network_builder
 
+from learning.InterScene import sit_agent, sit_players
+
 args = None
 cfg = None
 cfg_train = None
@@ -175,6 +177,9 @@ def build_alg_runner(algo_observer):
     runner.model_builder.model_factory.register_builder('amp', lambda network, **kwargs : amp_models.ModelAMPContinuous(network))  
     runner.model_builder.network_factory.register_builder('amp', lambda **kwargs : amp_network_builder.AMPBuilder())
     
+    runner.algo_factory.register_builder('task_location_sit', lambda **kwargs : sit_agent.SitAgent(**kwargs))
+    runner.player_factory.register_builder('task_location_sit', lambda **kwargs : sit_players.SitPlayer(**kwargs))
+
     return runner
 
 def main():

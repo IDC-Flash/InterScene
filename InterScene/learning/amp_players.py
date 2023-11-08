@@ -32,6 +32,7 @@ from rl_games.algos_torch import torch_ext
 from rl_games.algos_torch.running_mean_std import RunningMeanStd
 
 import learning.common_player as common_player
+from utils.torch_utils import load_checkpoint
 
 class AMPPlayerContinuous(common_player.CommonPlayer):
     def __init__(self, config):
@@ -43,9 +44,13 @@ class AMPPlayerContinuous(common_player.CommonPlayer):
 
     def restore(self, fn):
         if (fn != 'Base'):
-            super().restore(fn)
+            # super().restore(fn)
+            checkpoint = load_checkpoint(fn, self.device)
+            self.model.load_state_dict(checkpoint['model'])
+            if self.normalize_input:
+                self.running_mean_std.load_state_dict(checkpoint['running_mean_std'])
             if self._normalize_amp_input:
-                checkpoint = torch_ext.load_checkpoint(fn)
+                checkpoint = load_checkpoint(fn, self.device)
                 self._amp_input_mean_std.load_state_dict(checkpoint['amp_input_mean_std'])
         return
     

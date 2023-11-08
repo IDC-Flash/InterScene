@@ -30,6 +30,7 @@
 
 from env.base_envs.humanoid_amp import HumanoidAMP
 from env.base_envs.humanoid_amp_singleEnv import HumanoidAMPSingleEnv
+from env.tasks.humanoid_location_sit import HumanoidLocationSit
 from env.base_envs.vec_task_wrappers import VecTaskPythonWrapper
 
 from isaacgym import rlgpu
