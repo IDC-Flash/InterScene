@@ -43,8 +43,9 @@ from utils import torch_utils
 class HumanoidAMPSingleEnv(HumanoidAMP):
 
     def __init__(self, cfg, sim_params, physics_engine, device_type, device_id, headless):
+        # this env only contains 1 object
 
-        self._is_train = cfg["args"].train
+        self._is_train = cfg["args"].train # determine to load training or testing set of objects
         
         self._randomRot_obj = cfg["env"]["randomRotObj"]
         self._randomRot_humanoid = cfg["env"]["randomRotHumanoid"]
@@ -63,7 +64,7 @@ class HumanoidAMPSingleEnv(HumanoidAMP):
         return
 
     def get_obs_size(self):
-        return super().get_obs_size() + 8 * 3 + 2
+        return super().get_obs_size() + 8 * 3 + 2 # eight 3D points on bbox + 2D facing vector
 
     def _compute_object_obs(self, env_ids=None):
         if (env_ids is None):
@@ -105,6 +106,7 @@ class HumanoidAMPSingleEnv(HumanoidAMP):
         # Load assets
         self._load_object_assets()
 
+        # random sample a fixed object for each simulation env, due to the limitation of IsaacGym
         self._every_env_object_ids = self._object_lib.sample_objects(num_envs)
         self._every_env_object_bps, self._every_env_object_facings = self._object_lib.get_object_infos(self._every_env_object_ids)
 
@@ -195,7 +197,7 @@ class HumanoidAMPSingleEnv(HumanoidAMP):
 
         num_samples = len(env_ids)
         rot_axis = torch.zeros((num_samples, 3), device=self.device, dtype=torch.float32)
-        rot_axis[..., 2] = 1
+        rot_axis[..., 2] = 1 # z
 
         ########### randomize humanoid state (pos/rot) ###########
         a = torch.rand(num_samples, device=self.device, dtype=torch.float32) * (self._max_dist ** 2 - self._min_dist) + self._min_dist # r=sqrt(a) r:1-5 a:1-25
@@ -252,10 +254,11 @@ class HumanoidAMPSingleEnv(HumanoidAMP):
         
         self._reset_default_env_ids = env_ids
 
-        if (len(self._reset_default_env_ids) > 0):
-            self._kinematic_humanoid_rigid_body_states[self._reset_default_env_ids] = self._initial_humanoid_rigid_body_states[self._reset_default_env_ids]
+        if (len(env_ids) > 0):
+            self._kinematic_humanoid_rigid_body_states[env_ids] = \
+                compute_kinematic_rigid_body_states(root_pos, root_rot, self._initial_humanoid_rigid_body_states[env_ids])
 
-        self._every_env_init_dof_pos[self._reset_default_env_ids] = self._initial_dof_pos[env_ids] # for "enableTrackInitState"
+        self._every_env_init_dof_pos[env_ids] = self._initial_dof_pos[env_ids] # for "enableTrackInitState"
 
         return
 
@@ -379,3 +382,31 @@ def compute_humanoid_reset(reset_buf, progress_buf, contact_buf, contact_body_id
     reset = torch.where(progress_buf >= max_episode_length - 1, torch.ones_like(reset_buf), terminated)
 
     return reset, terminated
+
+@torch.jit.script
+def compute_kinematic_rigid_body_states(root_pos, root_rot, initial_humanoid_rigid_body_states):
+    # type: (Tensor, Tensor, Tensor) -> Tensor
+
+    num_bodies = initial_humanoid_rigid_body_states.shape[1] # 15
+
+    root_pos_exp = torch.broadcast_to(root_pos.unsqueeze(1), (root_pos.shape[0], num_bodies, root_pos.shape[1])).reshape(-1, 3) # (num_envs, 3) >> (num_envs, 15, 3) >> (num_envs*15, 3)
+    root_rot_exp = torch.broadcast_to(root_rot.unsqueeze(1), (root_rot.shape[0], num_bodies, root_rot.shape[1])).reshape(-1, 4) # (num_envs, 4) >> (num_envs, 15, 4) >> (num_envs*15, 4)
+
+    init_body_pos = initial_humanoid_rigid_body_states[..., 0:3] # (num_envs, 15, 3)
+    init_body_rot = initial_humanoid_rigid_body_states[..., 3:7] # (num_envs, 15, 4)
+    init_body_vel = initial_humanoid_rigid_body_states[..., 7:10] # (num_envs, 15, 3)
+    init_body_ang_vel = initial_humanoid_rigid_body_states[..., 10:13] # (num_envs, 15, 3)
+
+    init_root_pos = init_body_pos[:, 0:1, :] # (num_envs, 1, 3)
+    init_body_pos_canonical = (init_body_pos - init_root_pos).reshape(-1, 3) # (num_envs, 15, 3) >> (num_envs*15, 3)
+    init_body_rot = init_body_rot.reshape(-1, 4)
+    init_body_vel = init_body_vel.reshape(-1, 3)
+    init_body_ang_vel = init_body_ang_vel.reshape(-1, 3)
+    
+    curr_body_pos = (quat_rotate(root_rot_exp, init_body_pos_canonical) + root_pos_exp).reshape(-1, num_bodies, 3)
+    curr_body_rot = (quat_mul(root_rot_exp, init_body_rot)).reshape(-1, num_bodies, 4)
+    curr_body_vel = (quat_rotate(root_rot_exp, init_body_vel)).reshape(-1, num_bodies, 3)
+    curr_body_ang_vel = (quat_rotate(root_rot_exp, init_body_ang_vel)).reshape(-1, num_bodies, 3)
+    curr_humanoid_rigid_body_states = torch.cat((curr_body_pos, curr_body_rot, curr_body_vel, curr_body_ang_vel), dim=-1)
+    
+    return curr_humanoid_rigid_body_states

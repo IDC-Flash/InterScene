@@ -16,7 +16,7 @@ env:
   localRootObs: True
   keyBodies: ["right_hand", "left_hand", "right_foot", "left_foot"]
   contactBodies: ["right_foot", "left_foot"]
-  terminationHeight: 0.20
+  terminationHeight: 0.15
   enableEarlyTermination: True
 
   enableSelfCollisionDetection: True
@@ -53,7 +53,3 @@ sim:
   flex:
     num_inner_iterations: 10
     warm_start: 0.25
-
-eval:
-  episodeLength: 600 # 20s
-  disableIET: True
