@@ -1,0 +1,10 @@
+rl-games==1.1.4
+smplx==0.1.28
+torchgeometry==0.1.2
+pyglet==1.5.11
+scenepic==1.1.0
+termcolor
+six
+trimesh
+tqdm
+matplotlib

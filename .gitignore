@@ -162,4 +162,5 @@ cython_debug/
 /samp/
 /body_models/
 /InterScene/data/dataset_samp_sit/motions/
+/InterScene/data/dataset_samp_sit/objects/*/vis/
 /output/
