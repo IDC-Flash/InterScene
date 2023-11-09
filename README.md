@@ -34,7 +34,7 @@ Our framework enables physically simulated characters to perform long-term inter
 
 ## News
 
-- **[Nov. &nbsp; 9, 2023]** Code for training and evaluating the sit policy released.
+- **[Nov. &nbsp;9, 2023]** Code for training and evaluating the sit policy released.
 - **[Oct. 16, 2023]** Paper accepted to 3DV 2024. We plan to release the code in mid-November 2023.
 
 ## Dependencies
@@ -96,10 +96,10 @@ python InterScene/data/dataset_samp_sit/generate_obj.py
 
 ```
 ## training sit policy
-python InterScene/run.py --task HumanoidLocationSit --cfg_env InterScene/data/cfg/humanoid_location_sit.yaml --motion_file InterScene/data/dataset_samp_sit/dataset_samp_sit.yaml --num_envs 4096 --headless
+python InterScene/run.py --task HumanoidLocationSit --cfg_env InterScene/data/cfg/humanoid_location_sit.yaml --cfg_train InterScene/data/cfg/train/rlg/amp_task_location_sit.yaml --motion_file InterScene/data/dataset_samp_sit/dataset_samp_sit.yaml --num_envs 4096 --headless
 
 ## evaluating sit policy
-python InterScene/run.py --task HumanoidLocationSit --cfg_env InterScene/data/cfg/humanoid_location_sit.yaml --motion_file InterScene/data/dataset_samp_sit/dataset_samp_sit.yaml --num_envs 4096 --headless --checkpoint InterScene/data/models/policy_sit.pth --test
+python InterScene/run.py --task HumanoidLocationSit --cfg_env InterScene/data/cfg/humanoid_location_sit.yaml --cfg_train InterScene/data/cfg/train/rlg/amp_task_location_sit.yaml --motion_file InterScene/data/dataset_samp_sit/dataset_samp_sit.yaml --num_envs 4096 --headless --checkpoint InterScene/data/models/policy_sit.pth --test
 ```
 
 ## Citation
