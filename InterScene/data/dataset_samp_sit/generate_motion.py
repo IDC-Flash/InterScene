@@ -11,6 +11,7 @@ import pickle
 import torch
 from smplx import SMPLX
 import torchgeometry as tgm
+import yaml
 
 from InterScene.poselib.skeleton.skeleton3d import SkeletonTree, SkeletonState, SkeletonMotion
 from InterScene.poselib.visualization.common import plot_skeleton_state, plot_skeleton_motion_interactive
@@ -206,6 +207,34 @@ if __name__ == "__main__":
         "chair_mo019_stageII": {"start": 60, "end": 420, "stateInitRange": 0.7500},
     }
 
+    with open(osp.join(osp.dirname(__file__), "dataset_samp_sit.yaml"), "r") as f:
+        dataset_split = yaml.load(f, Loader=yaml.SafeLoader)["objects"]
+
+    object_meshes = {}
+    object_dir = osp.join(osp.dirname(__file__), "objects")
+    for split, obj_ids in dataset_split.items():
+        object_meshes[split] = {}
+        for obj_name in obj_ids:
+            textured_mesh = trimesh.load(osp.join(object_dir, obj_name, "geom/mesh.obj"), process=False)
+            del_texture_mesh = trimesh.Trimesh(vertices=textured_mesh.vertices, faces=textured_mesh.faces)
+            if split == "train":
+                del_texture_mesh.visual.vertex_colors[:, :3] = np.array([1.00, 1.00, 0.88]) * 255
+            else:
+                del_texture_mesh.visual.vertex_colors[:, :3] = np.array([1.00, 0.88, 1.00]) * 255
+            
+            cfg_file_path = osp.join(object_dir, obj_name, "config.yaml")
+            with open(cfg_file_path, "r") as f:
+                obj_cfg = yaml.load(f, Loader=yaml.SafeLoader)
+                from scipy.spatial.transform import Rotation as R
+                r = R.from_euler('XYZ', obj_cfg["pose"]["rotAngle"] * np.asarray(obj_cfg["pose"]["rotAxis"]), degrees=False)
+                rotation_matrix = r.as_matrix()
+                transform_matrix = np.identity(4)
+                transform_matrix[:3, :3] = rotation_matrix
+                transform_matrix[:3, -1] = obj_cfg["pose"]["trans"]
+                del_texture_mesh.apply_transform(transform_matrix)
+
+            object_meshes[split][obj_name] = del_texture_mesh
+
     pbar = tqdm(list(motion_cfg.keys()))
     for seq in pbar:
         pbar.set_description(seq)
@@ -319,6 +348,10 @@ if __name__ == "__main__":
         sp_anim = sp_animation(framerate=target_fps)
         plane = trimesh.load(osp.join(osp.dirname(__file__), "../meshes/plane.obj"), process=False)
         sp_anim.add_static_mesh(plane, 'plane')
+        for obj_name, obj_mesh in object_meshes["train"].items():
+            sp_anim.add_static_mesh(obj_mesh, obj_name)
+        for obj_name, obj_mesh in object_meshes["test"].items():
+            sp_anim.add_static_mesh(obj_mesh, obj_name)
 
         part_meshes = []
         for partName in amp_humanoid_tpose.skeleton_tree.node_names:
